@@ -1,68 +1,78 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const {addUser,getByUserName,getByEmail} = require('../model/users_M');
+const { addUser, getByUserName, getByEmail } = require('../model/users_M');
 
-async function register(req,res) {
-    try{
+async function register(req, res) {
+    try {
         let name = req.body.name;
         let email = req.body.email;
         let userName = req.body.userName;
-        let pass = req.pass;
+        let pass = req.body.pass; // تأكدي أنها req.body.pass وليس req.pass
 
         let user = await getByUserName(userName);
-        if(user){
-            return res.status(409).json({message:"שם משתמש קיים במערכת"});
+        if (user) {
+            return res.status(409).json({ message: "שם משתמש קיים במערכת" });
         }
         user = await getByEmail(email);
-        if(user){
-            return res.status(409).json({message:"אימייל קיים במערכת"});
+        if (user) {
+            return res.status(409).json({ message: "אימייל קיים במערכת" });
         }
 
-        let userId = await addUser({name,email,userName,pass});
-        if(!userId){
-            return res.status(500).json({message:"Server error"});
+        // ملاحظة: إذا أردتِ استخدام bcrypt، يجب تشفير كلمة المرور هنا قبل addUser
+        let userId = await addUser({ name, email, userName, pass });
+        if (!userId) {
+            return res.status(500).json({ message: "Server error" });
         }
-        res.status(201).json({message:"נוסף בהצלחה"});
-    }catch(err){
+        res.status(201).json({ message: "נוסף בהצלחה" });
+    } catch (err) {
         console.error(err);
-        res.status(500).json({message:"Server error"});
+        res.status(500).json({ message: "Server error" });
     }
 }
 
-async function login(req,res,next) {
-    try{
+async function login(req, res, next) {
+    try {
+        // نرسل userName للدالة التي تبحث في عمود Uesername
         let user = await getByUserName(req.body.userName);
-        if(!user){
-            return res.status(400).json({message:"שם משתמש או סיסמה שגויים"});
+        
+        if (!user) {
+            return res.status(400).json({ message: "שם משתמש או סיסמה שגויים" });
         }
-        let isMatch = await bcrypt.compare(req.body.pass,user.pass);
-        if(!isMatch){
-            return res.status(400).json({message:"שם משתמש או סיסמה שגויים"});
+
+        // تعديل مهم: بما أن كلمة المرور في قاعدة بياناتك غير مشفرة (212814156)
+        // وبما أن اسم العمود هو Pasw، نستخدم المقارنة العادية مؤقتاً
+        const isMatch = (req.body.pass === user.Pasw); 
+
+        if (!isMatch) {
+            return res.status(400).json({ message: "שם משתמש או סיסמה שגويים" });
         }
+
         req.user = user;
         next();
-    }catch(err){
-        console.error(err);
-        res.status(500).json({message:"Server error"});
+    } catch (err) {
+        console.error("Login Error:", err);
+        res.status(500).json({ message: "Server error" });
     }
 }
 
-function createJwt(req,res) {
-    try{
+function createJwt(req, res) {
+    try {
         let user = req.user;
         let token = jwt.sign(
-            {id:user.id,name:user.name},
-            process.env.SECRET_KEY,
-            {expiresIn:'3h'}
+            { id: user.id, name: user.name },
+            process.env.SECRET_KEY || 'your_secret_key', // تأكدي من وجود المفتاح في .env
+            { expiresIn: '3h' }
         );
-        res.cookie('jwt',token,{httpOnly:true,maxAge:1000*60*60*3}).status(200).json({message:"התחברת בהצלחה",name:user.name});
-    }catch(err){
+        res.cookie('jwt', token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 3 })
+           .status(200)
+           .json({ message: "התחברת בהצלחה", name: user.name });
+    } catch (err) {
         console.error(err);
-        res.status(500).json({message:"Server error"});
+        res.status(500).json({ message: "Server error" });
     }
 }
 
-module.exports ={
+module.exports = {
     register,
     login,
     createJwt
