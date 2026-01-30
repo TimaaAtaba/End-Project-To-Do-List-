@@ -5,6 +5,7 @@ async function getAll(userId) {
     let [rows] = await db.query(sql, [userId]);
     return rows;
 }
+
 async function getOne(taskId, userId) {
     let sql = `SELECT * FROM tasks WHERE id = ? AND user_id = ?`;
     let [result] = await db.query(sql, [taskId, userId]);
