@@ -1,4 +1,5 @@
 const {getAll,getOne,remove,update} = require('../model/users_M.js');
+
 async function getAllUsers(req,res) {
     try{
         let users = await getAll();
