@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categories</title>
-    <link rel="stylesheet" href="../styles/style.css">
+    <title>Manage Categories</title>
+    <link rel="stylesheet" href="/styles/styles.css">
 </head>
 <body>
-    <h1 id="greating"></h1>
+    <h1 id="greating">Hello Timaa</h1>
     <hr>
-    <div>
+    <div class="form-container">
         <input type="hidden" id="id">
-        <label for="name">Name:</label>
-        <input id="name" type="text">
+        <label for="name">Category Name:</label>
+        <input id="name" type="text" placeholder="Enter name here...">
         <button onclick="addOrEditCategory()">Send</button>
     </div>
     <hr>
     <table border="1">
         <thead>
             <tr>
-                <th>Name</th>
+                <th>Category Name</th>
                 <th>Delete</th>
                 <th>Edit</th>
             </tr>
         </thead>
         <tbody id="categoriesTable"></tbody>
     </table>
-    <script src="../scripts/categories.js"></script>
+    <script src="/scripts/categories.js"></script>
 </body>
 </html>

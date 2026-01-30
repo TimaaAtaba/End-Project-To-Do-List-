@@ -7,7 +7,7 @@ async function register(req, res) {
         let name = req.body.name;
         let email = req.body.email;
         let userName = req.body.userName;
-        let pass = req.body.pass; // تأكدي أنها req.body.pass وليس req.pass
+        let pass = req.body.pass; 
 
         let user = await getByUserName(userName);
         if (user) {
@@ -18,7 +18,6 @@ async function register(req, res) {
             return res.status(409).json({ message: "אימייל קיים במערכת" });
         }
 
-        // ملاحظة: إذا أردتِ استخدام bcrypt، يجب تشفير كلمة المرور هنا قبل addUser
         let userId = await addUser({ name, email, userName, pass });
         if (!userId) {
             return res.status(500).json({ message: "Server error" });
@@ -32,15 +31,12 @@ async function register(req, res) {
 
 async function login(req, res, next) {
     try {
-        // نرسل userName للدالة التي تبحث في عمود Uesername
         let user = await getByUserName(req.body.userName);
         
         if (!user) {
             return res.status(400).json({ message: "שם משתמש או סיסמה שגויים" });
         }
 
-        // تعديل مهم: بما أن كلمة المرور في قاعدة بياناتك غير مشفرة (212814156)
-        // وبما أن اسم العمود هو Pasw، نستخدم المقارنة العادية مؤقتاً
         const isMatch = (req.body.pass === user.Pasw); 
 
         if (!isMatch) {
@@ -60,7 +56,7 @@ function createJwt(req, res) {
         let user = req.user;
         let token = jwt.sign(
             { id: user.id, name: user.name },
-            process.env.SECRET_KEY || 'your_secret_key', // تأكدي من وجود المفتاح في .env
+            process.env.SECRET_KEY || 'your_secret_key', 
             { expiresIn: '3h' }
         );
         res.cookie('jwt', token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 3 })

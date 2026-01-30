@@ -1,90 +1,45 @@
-let greating = "Hello " + localStorage.getItem('name');
-document.getElementById('greating').innerHTML = greating;
-let allCategories = [];
+// English Version - categories.js
+let greeting = "Hello " + (localStorage.getItem('name') || "Timaa");
+document.getElementById('greating').innerHTML = greeting;
 
 async function getCategories() {
-    let res = await fetch('/categorias');
-    if(res.status == 401){ window.location.href='/login'; return; }
-    let data = await res.json();
-    allCategories = data;
-    createCategoriesTable(data);
-}
-
-function createCategoriesTable(data){
-    let txt = "";
-    for(let c of data){
-        txt += `<tr>
-            <td>${c.Name}</td>
-            <td><button onclick="deleteCategory(${c.id})">🗑️</button></td>
-            <td><button onclick="categoryToEdit(${c.id})">✏️</button></td>
-        </tr>`;
-    }
-    document.getElementById('categoriesTable').innerHTML = txt;
-}
-
-async function addCategory(){
-    let Name = document.getElementById('name').value;
-    if(!Name){ alert("Enter name"); return; }
-    await fetch('/categorias',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ Name })
-    });
-    clearForm();
-    getCategories();
-}
-
-async function categoryToEdit(id){
-    let res = await fetch(`/categorias/${id}`);
-    let data = await res.json();
-    document.getElementById('id').value = data.id;
-    document.getElementById('name').value = data.Name;
-}
-
-async function editCategory(id){
-    let Name = document.getElementById('name').value;
-    if(!Name){ alert("Enter name"); return; }
-    await fetch(`/categorias/${id}`,{
-        method:'PUT',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ Name })
-    });
-    clearForm();
-    getCategories();
-}
-
-async function deleteCategory(id) {
-    const ok = confirm(
-        "אם תמחק קטגוריה זו, כל המשימות המשויכות אליה יימחקו.\nהאם ברצונך להמשיך?"
-    );
-    if (!ok) return;
-
     try {
-        const relatedTasks = allTasks.filter(task => task && task.CategoryID == id);
-        for (let task of relatedTasks) {
-            await fetch(`/tasks/${task.id}`, { method: 'DELETE' });
+        let res = await fetch('/categories');
+        if (res.status == 401) { window.location.href = '/login'; return; }
+        let data = await res.json();
+        
+        // Fix: Ensure we use the exact keys from your DB (id, name)
+        let categories = Array.isArray(data) ? data : [];
+        let txt = "";
+        for (let c of categories) {
+            txt += `<tr>
+                <td>${c.name}</td>
+                <td><button onclick="deleteCategory(${c.id})">Delete 🗑️</button></td>
+                <td><button onclick="categoryToEdit(${c.id})">Edit ✏️</button></td>
+            </tr>`;
         }
-
-        await fetch(`/categorias/${id}`, { method: 'DELETE' });
-
-        getCategories();
-        getTasks();
-
+        document.getElementById('categoriesTable').innerHTML = txt;
     } catch (err) {
-        alert("שגיאה במהלך מחיקת הקטגוריה או המשימות");
-        console.error(err);
+        console.error("Fetch error:", err);
     }
 }
 
+async function addCategory() {
+    let Name = document.getElementById('name').value.trim();
+    if (!Name) { alert("Please enter a name"); return; }
 
-function addOrEditCategory(){
-    let id = document.getElementById('id').value;
-    if(id){ editCategory(id); }else{ addCategory(); }
+    let res = await fetch('/categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ Name }) // Sending 'Name' to match Controller
+    });
+
+    if (res.ok) {
+        document.getElementById('name').value = ""; // Clear input
+        await getCategories(); // Refresh table
+    } else {
+        alert("Failed to add category. Check server console.");
+    }
 }
-
-function clearForm(){
-    document.getElementById('id').value="";
-    document.getElementById('name').value="";
-}
-
+// Run on load
 getCategories();
