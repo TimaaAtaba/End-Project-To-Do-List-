@@ -26,7 +26,6 @@ async function getTask(req, res) {
 
 async function addTask(req, res) {
     try {
-        // Fix: Use exact property names your Model/DB expects
         const text = req.body.text;
         const userId = req.user.id;
         const categoryId = req.body.CategoryID || null; 
