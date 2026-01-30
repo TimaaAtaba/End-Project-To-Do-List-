@@ -28,7 +28,6 @@ async function update(taskId, userId, dataToUpdate) {
     let fields = [];
     let values = [];
 
-    // تحويل المفاتيح لتناسب أسماء الأعمدة (CamelCase to snake_case)
     const mapKeys = {
         text: 'text',
         isDone: 'is_done',
