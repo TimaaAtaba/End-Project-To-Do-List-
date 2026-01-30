@@ -35,7 +35,6 @@ async function deleteUser(req,res) {
         res.status(500).json({message:"Server error"})
     }
 }
-
 async function updateUser(req,res) {
     try{
         let affectedRows = await update(req.id,req.user);
