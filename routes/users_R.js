@@ -4,7 +4,6 @@ const {getAllUsers,getOneUser,deleteUser,updateUser} = require('../controller/us
 const { isValidId, valuesToEdit } = require('../middleware/users_MID');
 const { isLoggedIn } = require('../middleware/auth_MID');
 
-
 router.get('/',isLoggedIn,getAllUsers);
 router.get('/:id',isValidId,getOneUser);
 router.delete('/:id',isValidId,deleteUser);
