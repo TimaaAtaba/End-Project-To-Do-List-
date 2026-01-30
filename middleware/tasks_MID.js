@@ -25,7 +25,7 @@ function valuesToEdit(req,res,next){
     }
     let keys = Object.keys(obj);
     if(keys.length === 0){
-        
+        return res.status(400).json({message:"Missing parameters"})
     }
     
     req.newTask = obj;
