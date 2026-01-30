@@ -11,7 +11,6 @@ async function getAllUsers(req,res) {
         res.status(500).json({message:"Server error"})
     }
 }
-
 async function getOneUser(req,res) {
     try{
         let user = await getOne(req.id);
