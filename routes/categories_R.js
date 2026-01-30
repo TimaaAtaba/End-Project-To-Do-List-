@@ -10,4 +10,5 @@ router.get('/:id', isLoggedIn, isValidId, getCategory);
 router.delete('/:id', isLoggedIn, deleteCategory);
 router.patch('/:id', isLoggedIn, isValidId, validValues, updateCategory);
 
+
 module.exports = router;
