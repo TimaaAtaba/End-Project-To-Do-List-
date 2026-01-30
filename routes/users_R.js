@@ -8,4 +8,5 @@ router.get('/',isLoggedIn,getAllUsers);
 router.get('/:id',isValidId,getOneUser);
 router.delete('/:id',isValidId,deleteUser);
 router.patch('/:id',isValidId,valuesToEdit,updateUser);
+
 module.exports = router;
