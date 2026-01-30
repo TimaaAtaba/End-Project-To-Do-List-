@@ -13,7 +13,6 @@ async function getOne(taskId, userId) {
 }
 
 async function add({ text, userId, categoryId }) {
-    // التأكد من أسماء الأعمدة: text, user_id, category_id
     let sql = `INSERT INTO tasks (text, user_id, category_id) VALUES (?,?,?)`;
     let [result] = await db.query(sql, [text, userId, categoryId]);
     return result.insertId;
