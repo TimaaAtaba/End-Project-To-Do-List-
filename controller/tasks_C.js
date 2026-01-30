@@ -32,7 +32,6 @@ async function addTask(req, res) {
 
         if (!text) return res.status(400).json({ message: "Task text is required" });
 
-        // Sending data with consistent naming
         let taskId = await add({ text, userId, categoryId });
         
         res.status(201).json({ message: "Task added successfully", taskId });
