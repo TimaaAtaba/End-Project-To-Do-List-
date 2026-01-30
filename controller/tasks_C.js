@@ -2,7 +2,6 @@ const { getAll, getOne, add, remove, update } = require('../model/tasks_M');
 
 async function getAllTasks(req, res) {
     try {
-        // Ensuring req.user exists from middleware
         if (!req.user || !req.user.id) return res.status(401).json({ message: "Unauthorized" });
 
         let tasks = await getAll(req.user.id);
