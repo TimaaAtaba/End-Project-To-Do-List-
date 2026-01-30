@@ -5,6 +5,7 @@ async function getAll(userId){
     let [rows] = await db.query(sql,[userId]);    
     return rows;
 }
+
 async function add({name,userId}){
     let sql = `INSERT INTO categorias (name,user_id) VALUES (?,?)`;
     let [result] = await db.query(sql,[name,userId]); 
