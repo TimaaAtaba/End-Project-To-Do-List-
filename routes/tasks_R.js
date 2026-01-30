@@ -10,5 +10,4 @@ router.get('/:id',isLoggedIn,isValidId,getTask);
 router.delete('/:id',isLoggedIn,isValidId,deleteTask);
 router.patch('/:id',isLoggedIn,isValidId,valuesToEdit,updateTask);
 
-
 module.exports = router;
