@@ -5,6 +5,7 @@ async function getAll(){
     let [rows] = await db.query(sql);    
     return rows;
 }
+
 async function getOne(id){
     let sql = `SELECT id, name, Email FROM users WHERE id = ?`;
     let [result] = await db.query(sql, [id]);    
