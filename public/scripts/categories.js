@@ -34,7 +34,7 @@ async function addCategory() {
 
     if (res.ok) {
         document.getElementById('name').value = ""; 
-        await getCategories(); // Refresh table
+        await getCategories(); 
     } else {
         alert("Failed to add category. Check server console.");
     }
