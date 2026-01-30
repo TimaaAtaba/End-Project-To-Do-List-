@@ -8,7 +8,6 @@ async function getCategories() {
         if (res.status == 401) { window.location.href = '/login'; return; }
         let data = await res.json();
         
-        // Fix: Ensure we use the exact keys from your DB (id, name)
         let categories = Array.isArray(data) ? data : [];
         let txt = "";
         for (let c of categories) {
