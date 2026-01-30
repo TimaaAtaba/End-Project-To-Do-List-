@@ -39,5 +39,4 @@ async function addCategory() {
         alert("Failed to add category. Check server console.");
     }
 }
-// Run on load
 getCategories();
