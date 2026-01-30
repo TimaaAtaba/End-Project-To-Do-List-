@@ -1,7 +1,6 @@
 const db = require('../config/db_config');
 
 async function getAll(userId) {
-    // تصحيح اسم العمود ليتوافق مع قاعدة البيانات (user_id)
     let sql = `SELECT * FROM tasks WHERE user_id = ?`;
     let [rows] = await db.query(sql, [userId]);
     return rows;
