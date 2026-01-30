@@ -4,7 +4,6 @@ const {getAllTasks,addTask,getTask,deleteTask, updateTask} = require('../control
 const {isLoggedIn} = require('../middleware/auth_MID');
 const {valuesToAdd,isValidId,valuesToEdit} = require('../middleware/tasks_MID');
 
-
 router.get('/',isLoggedIn,getAllTasks);
 router.post('/',isLoggedIn,valuesToAdd,addTask);
 router.get('/:id',isLoggedIn,isValidId,getTask);
