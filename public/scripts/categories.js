@@ -1,4 +1,3 @@
-// English Version - categories.js
 let greeting = "Hello " + (localStorage.getItem('name') || "Timaa");
 document.getElementById('greating').innerHTML = greeting;
 
