@@ -11,6 +11,7 @@ async function add({name,userId}){
     let [result] = await db.query(sql,[name,userId]); 
     return result.insertId;
 }
+
 async function getOne(catId,userId){
     let sql = `SELECT * FROM categorias WHERE id = ? AND user_id = ?`;
     let [result] = await db.query(sql,[catId,userId]);    
