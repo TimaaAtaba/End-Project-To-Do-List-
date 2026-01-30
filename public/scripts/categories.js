@@ -33,7 +33,7 @@ async function addCategory() {
     });
 
     if (res.ok) {
-        document.getElementById('name').value = ""; // Clear input
+        document.getElementById('name').value = ""; 
         await getCategories(); // Refresh table
     } else {
         alert("Failed to add category. Check server console.");
